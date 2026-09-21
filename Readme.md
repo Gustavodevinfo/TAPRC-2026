@@ -1,1 +1,1 @@
-Alunos do grupo: Danielli Tomaz, Gustavo dos Anjos, Mateus Samuel da Costa Böhr, Murilo Silveira, Thainara Silva,
+Alunos do grupo: Danielli Tomaz, Gustavo dos Anjos, Mateus Samuel da Costa Böhr
