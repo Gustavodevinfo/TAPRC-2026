@@ -54,7 +54,88 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
         #Inicio
         # -------------------------------------------------
 
+        # --------------------------------------------------
+        # 1. CHAMADO_SLA
+        # --------------------------------------------------
 
+        logging.info("Consultando tabela CHAMADO_SLA...")
+
+        chamado_sla = """
+            SELECT *
+            FROM [db-univille].itsm.chamado_sla
+        """
+
+        chamado_sla_selecionado = pd.read_sql(chamado_sla, conn)
+
+        logging.info(
+            f"Tabela CHAMADO_SLA consultada com sucesso. "
+            f"Registros encontrados: {len(chamado_sla_selecionado)}"
+        )
+
+        # --------------------------------------------------
+        # 2. CHAMADO_STATUS_HISTORICO
+        # --------------------------------------------------
+
+        logging.info("Consultando tabela CHAMADO_STATUS_HISTORICO...")
+
+        chamado_status_historico = """
+            SELECT *
+            FROM [db-univille].itsm.chamado_status_historico
+        """
+
+        historico_selecionado = pd.read_sql(
+            chamado_status_historico,
+            conn
+        )
+
+        logging.info(
+            f"Tabela CHAMADO_STATUS_HISTORICO consultada com sucesso. "
+            f"Registros encontrados: {len(historico_selecionado)}"
+        )
+
+        # --------------------------------------------------
+        # 3. CLIENTE_ORGANIZACAO
+        # --------------------------------------------------
+
+        logging.info("Consultando tabela CLIENTE_ORGANIZACAO...")
+
+        cliente_organizacao = """
+            SELECT *
+            FROM [db-univille].itsm.cliente_organizacao
+        """
+
+        cliente_organizacao_selecionado = pd.read_sql(
+            cliente_organizacao,
+            conn
+        )
+
+        logging.info(
+            f"Tabela CLIENTE_ORGANIZACAO consultada com sucesso. "
+            f"Registros encontrados: "
+            f"{len(cliente_organizacao_selecionado)}"
+        )
+
+        # --------------------------------------------------
+        # 4. CSAT_AVALIACAO
+        # --------------------------------------------------
+
+        logging.info("Consultando tabela CSAT_AVALIACAO...")
+
+        csat_avaliacao = """
+            SELECT *
+            FROM [db-univille].itsm.csat_avaliacao
+        """
+
+        csat_avaliacao_selecionado = pd.read_sql(
+            csat_avaliacao,
+            conn
+        )
+
+        logging.info(
+            f"Tabela CSAT_AVALIACAO consultada com sucesso. "
+            f"Registros encontrados: "
+            f"{len(csat_avaliacao_selecionado)}"
+        )
 
         # --------------------------------------------------
         # Finalização
