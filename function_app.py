@@ -138,6 +138,64 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
         )
 
         # --------------------------------------------------
+        # 5. FILA
+        # --------------------------------------------------
+
+        logging.info("Consultando tabela FILA...")
+
+        fila = """
+            SELECT *
+            FROM [db-univille].itsm.fila
+        """
+
+        fila_selecionada = pd.read_sql(fila, conn)
+
+        logging.info(
+            f"Tabela FILA consultada com sucesso. "
+            f"Registros encontrados: {len(fila_selecionada)}"
+        )
+
+        # --------------------------------------------------
+        # 6. SLA
+        # --------------------------------------------------
+
+        logging.info("Consultando tabela SLA...")
+
+        sla = """
+            SELECT *
+            FROM [db-univille].itsm.sla
+        """
+
+        sla_selecionada = pd.read_sql(sla, conn)
+
+        logging.info(
+            f"Tabela SLA consultada com sucesso. "
+            f"Registros encontrados: {len(sla_selecionada)}"
+        )
+
+        # --------------------------------------------------
+        # 7. SOLICITANTE
+        # --------------------------------------------------
+
+        logging.info("Consultando tabela SOLICITANTE...")
+
+        solicitante = """
+            SELECT *
+            FROM [db-univille].itsm.solicitante
+        """
+
+        solicitante_selecionado = pd.read_sql(
+            solicitante,
+            conn
+        )
+
+        logging.info(
+            f"Tabela SOLICITANTE consultada com sucesso. "
+            f"Registros encontrados: "
+            f"{len(solicitante_selecionado)}"
+        )
+
+        # --------------------------------------------------
         # Finalização
         # --------------------------------------------------
 
