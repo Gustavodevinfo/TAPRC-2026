@@ -196,6 +196,60 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
         )
 
         # --------------------------------------------------
+        # 8. CATEGORIA
+        # --------------------------------------------------
+
+        logging.info("Consultando tabela CATEGORIA...")
+
+        categorias = """
+            SELECT *
+            FROM [db-univille].itsm.categoria
+        """
+
+        categorias_selecionada = pd.read_sql(categorias, conn)
+
+        logging.info(
+            f"Tabela CATEGORIA consultada com sucesso. "
+            f"Registros encontrados: {len(categorias_selecionada)}"
+        )
+
+        # --------------------------------------------------
+        # 9. ANALISTA
+        # --------------------------------------------------
+
+        logging.info("Consultando tabela ANALISTA...")
+
+        analista = """
+            SELECT *
+            FROM [db-univille].itsm.analista
+        """
+
+        analista_selecionado = pd.read_sql(analista, conn)
+
+        logging.info(
+            f"Tabela ANALISTA consultada com sucesso. "
+            f"Registros encontrados: {len(analista_selecionado)}"
+        )
+
+        # --------------------------------------------------
+        # 10. CHAMADO
+        # --------------------------------------------------
+
+        logging.info("Consultando tabela CHAMADO...")
+
+        chamado = """
+            SELECT *
+            FROM [db-univille].itsm.chamado
+        """
+
+        chamado_selecionado = pd.read_sql(chamado, conn)
+
+        logging.info(
+            f"Tabela CHAMADO consultada com sucesso. "
+            f"Registros encontrados: {len(chamado_selecionado)}"
+        )
+
+        # --------------------------------------------------
         # Finalização
         # --------------------------------------------------
 
