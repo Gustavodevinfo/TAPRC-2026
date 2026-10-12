@@ -1,9 +1,9 @@
 import logging
-import azure.functions as func
 import os
+
+import azure.functions as func
 import pandas as pd
 import pyodbc
-
 
 # ==========================================================
 # VARIÁVEIS DE AMBIENTE
@@ -23,10 +23,7 @@ app = func.FunctionApp()
 
 
 @app.timer_trigger(
-    schedule="*/1 * * * *",
-    arg_name="myTimer",
-    run_on_startup=False,
-    use_monitor=False
+    schedule="*/1 * * * *", arg_name="myTimer", run_on_startup=False, use_monitor=False
 )
 def timer_trigger(myTimer: func.TimerRequest) -> None:
 
@@ -51,7 +48,7 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
     try:
 
         # -------------------------------------------------
-        #Inicio
+        # Inicio
         # -------------------------------------------------
 
         # --------------------------------------------------
@@ -83,10 +80,7 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
             FROM [db-univille].itsm.chamado_status_historico
         """
 
-        historico_selecionado = pd.read_sql(
-            chamado_status_historico,
-            conn
-        )
+        historico_selecionado = pd.read_sql(chamado_status_historico, conn)
 
         logging.info(
             f"Tabela CHAMADO_STATUS_HISTORICO consultada com sucesso. "
@@ -104,10 +98,7 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
             FROM [db-univille].itsm.cliente_organizacao
         """
 
-        cliente_organizacao_selecionado = pd.read_sql(
-            cliente_organizacao,
-            conn
-        )
+        cliente_organizacao_selecionado = pd.read_sql(cliente_organizacao, conn)
 
         logging.info(
             f"Tabela CLIENTE_ORGANIZACAO consultada com sucesso. "
@@ -126,10 +117,7 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
             FROM [db-univille].itsm.csat_avaliacao
         """
 
-        csat_avaliacao_selecionado = pd.read_sql(
-            csat_avaliacao,
-            conn
-        )
+        csat_avaliacao_selecionado = pd.read_sql(csat_avaliacao, conn)
 
         logging.info(
             f"Tabela CSAT_AVALIACAO consultada com sucesso. "
@@ -184,10 +172,7 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
             FROM [db-univille].itsm.solicitante
         """
 
-        solicitante_selecionado = pd.read_sql(
-            solicitante,
-            conn
-        )
+        solicitante_selecionado = pd.read_sql(solicitante, conn)
 
         logging.info(
             f"Tabela SOLICITANTE consultada com sucesso. "
