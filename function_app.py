@@ -1,9 +1,9 @@
 import logging
-import azure.functions as func
 import os
+
+import azure.functions as func
 import pandas as pd
 import pyodbc
-
 
 # ==========================================================
 # VARIÁVEIS DE AMBIENTE
@@ -23,10 +23,7 @@ app = func.FunctionApp()
 
 
 @app.timer_trigger(
-    schedule="*/1 * * * *",
-    arg_name="myTimer",
-    run_on_startup=False,
-    use_monitor=False
+    schedule="*/1 * * * *", arg_name="myTimer", run_on_startup=False, use_monitor=False
 )
 def timer_trigger(myTimer: func.TimerRequest) -> None:
 
@@ -51,7 +48,7 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
     try:
 
         # -------------------------------------------------
-        #Inicio
+        # Inicio
         # -------------------------------------------------
 
         # --------------------------------------------------
@@ -83,10 +80,7 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
             FROM [db-univille].itsm.chamado_status_historico
         """
 
-        historico_selecionado = pd.read_sql(
-            chamado_status_historico,
-            conn
-        )
+        historico_selecionado = pd.read_sql(chamado_status_historico, conn)
 
         logging.info(
             f"Tabela CHAMADO_STATUS_HISTORICO consultada com sucesso. "
@@ -104,10 +98,7 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
             FROM [db-univille].itsm.cliente_organizacao
         """
 
-        cliente_organizacao_selecionado = pd.read_sql(
-            cliente_organizacao,
-            conn
-        )
+        cliente_organizacao_selecionado = pd.read_sql(cliente_organizacao, conn)
 
         logging.info(
             f"Tabela CLIENTE_ORGANIZACAO consultada com sucesso. "
@@ -126,15 +117,124 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
             FROM [db-univille].itsm.csat_avaliacao
         """
 
-        csat_avaliacao_selecionado = pd.read_sql(
-            csat_avaliacao,
-            conn
-        )
+        csat_avaliacao_selecionado = pd.read_sql(csat_avaliacao, conn)
 
         logging.info(
             f"Tabela CSAT_AVALIACAO consultada com sucesso. "
             f"Registros encontrados: "
             f"{len(csat_avaliacao_selecionado)}"
+        )
+
+        # --------------------------------------------------
+        # 5. FILA
+        # --------------------------------------------------
+
+        logging.info("Consultando tabela FILA...")
+
+        fila = """
+            SELECT *
+            FROM [db-univille].itsm.fila
+        """
+
+        fila_selecionada = pd.read_sql(fila, conn)
+
+        logging.info(
+            f"Tabela FILA consultada com sucesso. "
+            f"Registros encontrados: {len(fila_selecionada)}"
+        )
+
+        # --------------------------------------------------
+        # 6. SLA
+        # --------------------------------------------------
+
+        logging.info("Consultando tabela SLA...")
+
+        sla = """
+            SELECT *
+            FROM [db-univille].itsm.sla
+        """
+
+        sla_selecionada = pd.read_sql(sla, conn)
+
+        logging.info(
+            f"Tabela SLA consultada com sucesso. "
+            f"Registros encontrados: {len(sla_selecionada)}"
+        )
+
+        # --------------------------------------------------
+        # 7. SOLICITANTE
+        # --------------------------------------------------
+
+        logging.info("Consultando tabela SOLICITANTE...")
+
+        solicitante = """
+            SELECT *
+            FROM [db-univille].itsm.solicitante
+        """
+
+        solicitante_selecionado = pd.read_sql(
+            solicitante,
+            conn
+        )
+
+        logging.info(
+            f"Tabela SOLICITANTE consultada com sucesso. "
+            f"Registros encontrados: "
+            f"{len(solicitante_selecionado)}"
+        )
+
+        # --------------------------------------------------
+        # 8. CATEGORIA
+        # --------------------------------------------------
+
+        logging.info("Consultando tabela CATEGORIA...")
+
+        categorias = """
+            SELECT *
+            FROM [db-univille].itsm.categoria
+        """
+
+        categorias_selecionada = pd.read_sql(categorias, conn)
+
+        logging.info(
+            f"Tabela CATEGORIA consultada com sucesso. "
+            f"Registros encontrados: {len(categorias_selecionada)}"
+        )
+
+        # --------------------------------------------------
+        # 9. ANALISTA
+        # --------------------------------------------------
+
+        logging.info("Consultando tabela ANALISTA...")
+
+        analista = """
+            SELECT *
+            FROM [db-univille].itsm.analista
+        """
+
+        analista_selecionado = pd.read_sql(analista, conn)
+
+        logging.info(
+            f"Tabela ANALISTA consultada com sucesso. "
+            f"Registros encontrados: {len(analista_selecionado)}"
+        )
+
+        # --------------------------------------------------
+        # 10. CHAMADO
+        # --------------------------------------------------
+
+        logging.info("Consultando tabela CHAMADO...")
+
+        chamado = """
+            SELECT *
+            FROM [db-univille].itsm.chamado
+        """
+
+        chamado_selecionado = pd.read_sql(chamado, conn)
+
+        logging.info(
+            f"Tabela CHAMADO consultada com sucesso. "
+            f"Registros encontrados: {len(chamado_selecionado)}"
         )
 
         # --------------------------------------------------
