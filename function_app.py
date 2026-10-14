@@ -1,5 +1,6 @@
 import logging
 import os
+
 import azure.functions as func
 import pandas as pd
 import pyodbc
