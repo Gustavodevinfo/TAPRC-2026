@@ -172,10 +172,7 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
             FROM [db-univille].itsm.solicitante
         """
 
-        solicitante_selecionado = pd.read_sql(
-            solicitante,
-            conn
-        )
+        solicitante_selecionado = pd.read_sql(solicitante, conn)
 
         logging.info(
             f"Tabela SOLICITANTE consultada com sucesso. "
