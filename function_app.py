@@ -30,7 +30,7 @@ def salvar_no_datalake(df: pd.DataFrame, tabela: str):
 
     pasta_destino = f"itsm/{tabela}/ano={ano}/mes={mes}/dia={dia}"
 
-    nome_arquivo = f"{tabela}_{timestamp_str}.json"
+    nome_arquivo = f"{tabela}_{timestamp_str}.csv"
     caminho_completo = f"{pasta_destino}/{nome_arquivo}"
 
     try:
@@ -41,10 +41,10 @@ def salvar_no_datalake(df: pd.DataFrame, tabela: str):
 
         file_system_client.create_directory(pasta_destino)
 
-        json_data = df.to_json(orient="records", date_format="iso", force_ascii=False)
+        csv_data = df.to_csv(index=False)
 
         file_client = file_system_client.get_file_client(caminho_completo)
-        file_client.upload_data(json_data.encode("utf-8"), overwrite=True)
+        file_client.upload_data(csv_data.encode("utf-8"), overwrite=True)
 
         logging.info(f"Arquivo salvo com sucesso: {caminho_completo}")
 
