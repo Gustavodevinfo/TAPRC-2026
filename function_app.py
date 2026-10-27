@@ -1,6 +1,5 @@
 import logging
 import os
-import json
 from datetime import datetime, timezone
 
 import azure.functions as func
@@ -16,6 +15,7 @@ DB_PASSWORD = os.getenv("PASSWORD")
 STORAGE_CONNECTION_STRING = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
 CONTAINER_NAME = "bronze"
 
+
 def salvar_no_datalake(df: pd.DataFrame, tabela: str):
     if df.empty:
         logging.warning(f"Tabela {tabela} está vazia. Nada será salvo.")
@@ -23,26 +23,28 @@ def salvar_no_datalake(df: pd.DataFrame, tabela: str):
 
     agora = datetime.now(timezone.utc)
     timestamp_str = agora.strftime("%Y%m%dT%H%M%SZ")
-    
+
     ano = agora.strftime("%Y")
     mes = agora.strftime("%m")
     dia = agora.strftime("%d")
-    
+
     pasta_destino = f"itsm/{tabela}/ano={ano}/mes={mes}/dia={dia}"
-    
+
     nome_arquivo = f"{tabela}_{timestamp_str}.json"
     caminho_completo = f"{pasta_destino}/{nome_arquivo}"
 
     try:
-        service_client = DataLakeServiceClient.from_connection_string(STORAGE_CONNECTION_STRING)
+        service_client = DataLakeServiceClient.from_connection_string(
+            STORAGE_CONNECTION_STRING
+        )
         file_system_client = service_client.get_file_system_client(CONTAINER_NAME)
 
         file_system_client.create_directory(pasta_destino)
 
-        json_data = df.to_json(orient='records', date_format='iso', force_ascii=False)
-        
+        json_data = df.to_json(orient="records", date_format="iso", force_ascii=False)
+
         file_client = file_system_client.get_file_client(caminho_completo)
-        file_client.upload_data(json_data.encode('utf-8'), overwrite=True)
+        file_client.upload_data(json_data.encode("utf-8"), overwrite=True)
 
         logging.info(f"Arquivo salvo com sucesso: {caminho_completo}")
 
@@ -50,7 +52,9 @@ def salvar_no_datalake(df: pd.DataFrame, tabela: str):
         logging.error(f"Erro ao salvar {tabela} no Data Lake: {e}")
         raise
 
+
 app = func.FunctionApp()
+
 
 @app.timer_trigger(
     schedule="*/1 * * * *", arg_name="myTimer", run_on_startup=False, use_monitor=False
@@ -75,25 +79,38 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
         logging.info("Consultando tabela CHAMADO_SLA...")
         chamado_sla = "SELECT * FROM [db-univille].itsm.chamado_sla"
         chamado_sla_selecionado = pd.read_sql(chamado_sla, conn)
-        logging.info(f"Tabela CHAMADO_SLA consultada. Registros: {len(chamado_sla_selecionado)}")
+        logging.info(
+            f"Tabela CHAMADO_SLA consultada. Registros: {len(chamado_sla_selecionado)}"
+        )
         salvar_no_datalake(chamado_sla_selecionado, "chamado_sla")
 
         logging.info("Consultando tabela CHAMADO_STATUS_HISTORICO...")
-        chamado_status_historico = "SELECT * FROM [db-univille].itsm.chamado_status_historico"
+        chamado_status_historico = (
+            "SELECT * FROM [db-univille].itsm.chamado_status_historico"
+        )
         historico_selecionado = pd.read_sql(chamado_status_historico, conn)
-        logging.info(f"Tabela CHAMADO_STATUS_HISTORICO consultada. Registros: {len(historico_selecionado)}")
+        logging.info(
+            f"Tabela CHAMADO_STATUS_HISTORICO consultada. "
+            f"Registros: {len(historico_selecionado)}"
+        )
         salvar_no_datalake(historico_selecionado, "chamado_status_historico")
 
         logging.info("Consultando tabela CLIENTE_ORGANIZACAO...")
         cliente_organizacao = "SELECT * FROM [db-univille].itsm.cliente_organizacao"
         cliente_organizacao_selecionado = pd.read_sql(cliente_organizacao, conn)
-        logging.info(f"Tabela CLIENTE_ORGANIZACAO consultada. Registros: {len(cliente_organizacao_selecionado)}")
+        logging.info(
+            f"Tabela CLIENTE_ORGANIZACAO consultada. "
+            f"Registros: {len(cliente_organizacao_selecionado)}"
+        )
         salvar_no_datalake(cliente_organizacao_selecionado, "cliente_organizacao")
 
         logging.info("Consultando tabela CSAT_AVALIACAO...")
         csat_avaliacao = "SELECT * FROM [db-univille].itsm.csat_avaliacao"
         csat_avaliacao_selecionado = pd.read_sql(csat_avaliacao, conn)
-        logging.info(f"Tabela CSAT_AVALIACAO consultada. Registros: {len(csat_avaliacao_selecionado)}")
+        logging.info(
+            f"Tabela CSAT_AVALIACAO consultada. "
+            f"Registros: {len(csat_avaliacao_selecionado)}"
+        )
         salvar_no_datalake(csat_avaliacao_selecionado, "csat_avaliacao")
 
         logging.info("Consultando tabela FILA...")
@@ -111,25 +128,33 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
         logging.info("Consultando tabela SOLICITANTE...")
         solicitante = "SELECT * FROM [db-univille].itsm.solicitante"
         solicitante_selecionado = pd.read_sql(solicitante, conn)
-        logging.info(f"Tabela SOLICITANTE consultada. Registros: {len(solicitante_selecionado)}")
+        logging.info(
+            f"Tabela SOLICITANTE consultada. Registros: {len(solicitante_selecionado)}"
+        )
         salvar_no_datalake(solicitante_selecionado, "solicitante")
 
         logging.info("Consultando tabela CATEGORIA...")
         categorias = "SELECT * FROM [db-univille].itsm.categoria"
         categorias_selecionada = pd.read_sql(categorias, conn)
-        logging.info(f"Tabela CATEGORIA consultada. Registros: {len(categorias_selecionada)}")
+        logging.info(
+            f"Tabela CATEGORIA consultada. Registros: {len(categorias_selecionada)}"
+        )
         salvar_no_datalake(categorias_selecionada, "categoria")
 
         logging.info("Consultando tabela ANALISTA...")
         analista = "SELECT * FROM [db-univille].itsm.analista"
         analista_selecionado = pd.read_sql(analista, conn)
-        logging.info(f"Tabela ANALISTA consultada. Registros: {len(analista_selecionado)}")
+        logging.info(
+            f"Tabela ANALISTA consultada. Registros: {len(analista_selecionado)}"
+        )
         salvar_no_datalake(analista_selecionado, "analista")
 
         logging.info("Consultando tabela CHAMADO...")
         chamado = "SELECT * FROM [db-univille].itsm.chamado"
         chamado_selecionado = pd.read_sql(chamado, conn)
-        logging.info(f"Tabela CHAMADO consultada. Registros: {len(chamado_selecionado)}")
+        logging.info(
+            f"Tabela CHAMADO consultada. Registros: {len(chamado_selecionado)}"
+        )
         salvar_no_datalake(chamado_selecionado, "chamados")
 
         logging.info("========================================")
