@@ -2,3 +2,5 @@ azure-functions
 pandas
 pyodbc
 azure-storage-file-datalake
+azure-core
+sqlalchemy
