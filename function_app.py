@@ -104,7 +104,7 @@ def executar_bronze():
     logging.info("Iniciando extração da Bronze.")
 
     conn = pyodbc.connect(
-        f"DRIVER={{ODBC Driver 18 for SQL Server}};"
+        f"DRIVER={{ODBC Driver 17 for SQL Server}};"
         f"SERVER={DB_SERVER};"
         f"DATABASE={DB_DATABASE};"
         f"UID={DB_USER};"
@@ -160,7 +160,7 @@ def conectar_prata():
         host=PRATA_SERVER,
         database=PRATA_DATABASE,
         query={
-            "driver": "ODBC Driver 18 for SQL Server",
+            "driver": "ODBC Driver 17 for SQL Server",
             "Encrypt": "yes",
             "TrustServerCertificate": "no",
         },
